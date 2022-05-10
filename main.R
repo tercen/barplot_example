@@ -18,11 +18,13 @@ getValues <- function(ctx){
   
   rnames <- ctx$rselect() 
   rnames$.ri <- seq_len(nrow(rnames)) - 1
-  data <- left_join(data, rnames, by = ".ri")
+  data <- left_join(data, rnames, by = ".ri", suffix = c("", ".y")) %>%
+    select(-ends_with(".y"))
   
   cnames <- ctx$cselect()
   cnames$.ci <- seq_len(nrow(cnames)) - 1
-  data <- left_join(data, cnames, by = ".ci")
+  data <- left_join(data, cnames, by = ".ci", suffix = c("", ".y")) %>%
+    select(-ends_with(".y"))
   
   return(data)
 }
