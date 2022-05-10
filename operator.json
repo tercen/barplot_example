@@ -1,0 +1,99 @@
+{
+  "name": "Barplot operator",
+  "description": "Generate advanced barplots as PNG files.",
+  "tags": ["data visualisation"],
+  "authors": ["tercen"],
+  "urls": ["https://github.com/tercen/barplot_operator"],
+  "properties": [
+      {
+    "kind": "EnumeratedProperty",
+    "name": "format",
+    "defaultValue": "image/svg+xml",
+    "values": [
+      "image/png",
+      "image/svg+xml"
+    ],
+    "description": "Indicates which format to use."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "plot.width",
+    "defaultValue": 750,
+    "description": "Plot width (pixels)"
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "plot.height",
+    "defaultValue": 750,
+    "description": "Plot height (pixels)"
+  },
+  {
+    "kind": "BooleanProperty",
+    "name": "jitter",
+    "defaultValue": false,
+    "description": "Indicates whether individual data points should be added to the graph."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "dot.size",
+    "defaultValue": 0.5,
+    "description": "Data point size."
+  },
+  {
+    "kind": "EnumeratedProperty",
+    "name": "average.type",
+    "defaultValue": "Mean",
+    "values": [
+      "Mean",
+      "Median"
+    ],
+    "description": "Indicates which average kind should be computed."
+  },
+  {
+    "kind": "EnumeratedProperty",
+    "name": "error.type",
+    "defaultValue": "Standard Deviation",
+    "values": [
+      "None",
+      "Standard Deviation"
+    ],
+    "description": "Indicates which metric should be used for error bars."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "bar.width",
+    "defaultValue": 0.25,
+    "description": "Error bar width."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "xlab",
+    "defaultValue": "",
+    "description": "X axis label."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "ylab",
+    "defaultValue": "",
+    "description": "Y axis label."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "title",
+    "defaultValue": "",
+    "description": "Plot title."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "subtitle",
+    "defaultValue": "",
+    "description": "Plot subtitle."
+  },
+  {
+    "kind": "StringProperty",
+    "name": "caption",
+    "defaultValue": "",
+    "description": "Plot caption."
+  }
+  ]
+}
