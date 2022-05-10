@@ -1,14 +1,14 @@
 {
-  "name": "Barplot operator",
+  "name": "Bar plot",
   "description": "Generate advanced barplots as PNG files.",
-  "tags": ["data visualisation"],
+  "tags": ["data visualisation", "plot"],
   "authors": ["tercen"],
   "urls": ["https://github.com/tercen/barplot_operator"],
   "properties": [
       {
     "kind": "EnumeratedProperty",
     "name": "format",
-    "defaultValue": "image/svg+xml",
+    "defaultValue": "image/png",
     "values": [
       "image/png",
       "image/svg+xml"

@@ -6,6 +6,7 @@ library(png)
 library(ggplot2)
 library(uuid)
 library(svglite)
+library(tim)
 
 getValues <- function(ctx){
   values <- list()
@@ -28,7 +29,7 @@ getValues <- function(ctx){
 
 ctx <- tercenCtx()
 
-mimetype = ctx$op.value("format", type = as.character, default = "image/svg+xml")
+mimetype = ctx$op.value("format", type = as.character, default = "image/png")
 
 input.par <- list(
   plot.width   = ctx$op.value("plot.width", type = as.double, default = 750),
@@ -137,20 +138,10 @@ if (mimetype == 'image/png'){
   stop("Bad mimetype")
 }
 
-output_string <- base64enc::base64encode(
-  readBin(tmp, "raw", file.info(tmp)[1, "size"]),
-  "txt"
-)
+df_out <- tim::png_to_df(tmp)
+if(mimetype == 'image/svg+xml') df_out$mimetype <- 'image/svg+xml'
 
-#checksum <- as.vector(tools::md5sum(tmp))
-
-output_md <- base64enc::base64encode(charToRaw("# Bar plot\n\n This is a bar plot generated in Tercen."),"txt")
-
-tibble::tibble(
-  filename = c("markdown", "svg"),
-  mimetype = c("text/markdown", mimetype),
-  .content = c(output_md,output_string)
-) %>%
+df_out %>%
   ctx$addNamespace() %>%
   as_relation() %>%
   as_join_operator(list(), list()) %>%
