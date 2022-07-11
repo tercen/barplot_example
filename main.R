@@ -10,6 +10,7 @@ library(tim)
 library(grDevices)
 library(RColorBrewer)
 library(jsonlite)
+library(stringr)
 
 getValues <- function(ctx){
   values <- list()
