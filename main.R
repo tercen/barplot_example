@@ -179,8 +179,11 @@ if (mimetype == 'image/png'){
   stop("Bad mimetype")
 }
 
-df_out <- tim::png_to_df(tmp)
-if(mimetype == 'image/svg+xml') df_out$mimetype <- 'image/svg+xml'
+df_out <- tim::png_to_df(tmp, filename = "barplot.png")
+if(mimetype == 'image/svg+xml') {
+  df_out$mimetype <- 'image/svg+xml'
+  df_out$filename <- "barplot.svg"
+} 
 
 df_out %>%
   ctx$addNamespace() %>%
