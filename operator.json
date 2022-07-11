@@ -66,6 +66,18 @@
     "description": "Error bar width."
   },
   {
+    "kind": "DoubleProperty",
+    "name": "dodge.width",
+    "defaultValue": 1.1,
+    "description": "The amount to dodge in the x direction."
+  },
+  {
+    "kind": "DoubleProperty",
+    "name": "jitter.width",
+    "defaultValue": 0.05,
+    "description": "Jitter width."
+  },
+  {
     "kind": "StringProperty",
     "name": "xlab",
     "defaultValue": "",
@@ -94,6 +106,45 @@
     "name": "caption",
     "defaultValue": "",
     "description": "Plot caption."
+  },
+  {
+    "kind": "EnumeratedProperty",
+    "name": "color.palette",
+    "defaultValue": "Set1",
+    "values": [
+      "Accent",
+      "Dark2",
+      "Paired",
+      "Pastel1",
+      "Pastel2",
+      "Set1",
+      "Set2",
+      "Set3"
+    ],
+    "description": "Color palette (ColorBrewer's Qualitative palettes)."
+  },
+  {
+    "kind": "EnumeratedProperty",
+    "name": "theme",
+    "defaultValue": "light",
+    "values": [
+      "gray",
+      "bw",
+      "linedraw",
+      "light",
+      "dark",
+      "minimal",
+      "classic",
+      "void"
+    ],
+    "description": "Theme (from ggplot2)."
+  },
+  {
+    "kind": "BooleanProperty",
+    "name": "wrap.1d",
+    "defaultValue": true,
+    "description": "Wraps a 1d sequence of panels into 2d if no row or column factor is specified."
   }
   ]
 }
+
