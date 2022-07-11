@@ -9,6 +9,7 @@ library(svglite)
 library(tim)
 library(grDevices)
 library(RColorBrewer)
+library(jsonlite)
 
 getValues <- function(ctx){
   values <- list()
