@@ -60,12 +60,18 @@ input.par <- list(
 
 df <- getValues(ctx)
 
+if(length(ctx$labels) == 0) {
+  var_lab <- ".y"
+} else {
+  var_lab <- ctx$labels[[1]] 
+}
+
 if(input.par$average.type == "Mean") {
   df_agg <- df %>%
     group_by_at(vars(-.y)) %>%
     summarise(mn = mean(.y, na.rm = TRUE),
               n = n(),
-              custom_error = mean(!!sym(ctx$labels[[1]]), na.rm = TRUE),
+              custom_error = mean(!!sym(var_lab), na.rm = TRUE),
               stdv = sd(.y, na.rm = TRUE))
 }
 if(input.par$average.type == "Median") {
@@ -73,7 +79,7 @@ if(input.par$average.type == "Median") {
     group_by_at(vars(-.y)) %>%
     summarise(mn = median(.y, na.rm = TRUE),
               n = n(),
-              custom_error = mean(!!sym(ctx$labels[[1]]), na.rm = TRUE),
+              custom_error = mean(!!sym(var_lab), na.rm = TRUE),
               stdv = sd(.y, na.rm = TRUE))
 }
 
@@ -145,7 +151,7 @@ if(input.par$error.type == "Standard Deviation") {
   )
 } else if(input.par$error.type == "95% Confidence Interval") {
   plt <- plt + geom_errorbar(
-    aes(ymin = mn - 1.96*se, ymax = mn + 1.96*se),
+    aes(ymin = mn - 1.96 * se, ymax = mn + 1.96 * se),
     width = input.par$bar.width,
     position = position_dodge(width = input.par$dodge.width)
   )
