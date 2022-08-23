@@ -87,7 +87,7 @@ if(length(ctx$colors) > 0) {
     df_agg$Grouping_factors <- factor(apply(df_agg[, fill.col], 1, paste0, collapse = " - "))
     df$Grouping_factors <- factor(apply(df[, fill.col], 1, paste0, collapse = " - "))
     fill.col <- "Grouping_factors"
-  } 
+  }
 }
 
 if(!ctx$hasXAxis) {
@@ -98,8 +98,10 @@ if(!ctx$hasXAxis) {
 th <- get(paste0("theme_", input.par$theme))
 theme_set(th())
 
+clean_colname <- paste0("`", fill.col, "`")
+
 ### Core plot with x and y axes
-plt <- ggplot(df_agg, aes_string(x = ".x", y = "mn", fill = fill.col)) +
+plt <- ggplot(df_agg, aes_string(x = ".x", y = "mn", fill = clean_colname)) +
   geom_bar(position = position_dodge(width = input.par$dodge.width), stat = "identity") +
   labs(
     title = input.par$title,
@@ -115,13 +117,13 @@ if(input.par$jitter) {
   if(is.null(fill.col)) {
     plt <- plt + geom_jitter(
       data = df,
-      aes_string(x = ".x", y = ".y", fill = fill.col),
+      aes_string(x = ".x", y = ".y", fill = clean_colname),
       size = input.par$dot.size
     )
   } else {
     plt <- plt + geom_jitter(
       data = df,
-      aes_string(x = ".x", y = ".y", fill = fill.col),
+      aes_string(x = ".x", y = ".y", fill = clean_colname),
       size = input.par$dot.size,
       position = position_jitterdodge(jitter.width = input.par$jitter.width, dodge.width = input.par$dodge.width)
     )
