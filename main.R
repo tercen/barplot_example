@@ -40,7 +40,7 @@ mimetype = ctx$op.value("format", type = as.character, default = "image/png")
 input.par <- list(
   plot.width   = ctx$op.value("plot.width", type = as.double, default = 750),
   plot.height  = ctx$op.value("plot.height", type = as.double, default = 750),
-  jitter       = ctx$op.value("jitter", type = as.logical, default = FALSE),
+  jitter       = ctx$op.value("jitter", type = as.logical, default = TRUE),
   average.type = ctx$op.value("average.type", type = as.character, default = "Mean"),
   dot.size     = ctx$op.value("dot.size", type = as.double, default = 0.5),
   error.type   = ctx$op.value("error.type", type = as.character, default = "Standard Deviation"),
@@ -77,7 +77,12 @@ if(input.par$average.type == "Median") {
 fill.col <- NULL
 if(length(ctx$colors) > 0) {
   fill.col <- unlist(ctx$colors)
-} 
+  if(length(ctx$colors) > 1) {
+    df_agg$Grouping_factors <- factor(apply(df_agg[, fill.col], 1, paste0, collapse = " - "))
+    df$Grouping_factors <- factor(apply(df[, fill.col], 1, paste0, collapse = " - "))
+    fill.col <- "Grouping_factors"
+  } 
+}
 
 if(!ctx$hasXAxis) {
   df_agg$.x <- ""
