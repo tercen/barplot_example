@@ -19,6 +19,7 @@ getValues <- function(ctx){
   if(ctx$hasXAxis) data$.x <- select(ctx, .x)[[".x"]]
   
   if(length(ctx$colors)) data <- data %>% dplyr::bind_cols(ctx$select(ctx$colors))
+  if(length(ctx$labels)) data <- data %>% dplyr::bind_cols(ctx$select(ctx$labels))
   
   rnames <- ctx$rselect() 
   rnames$.ri <- seq_len(nrow(rnames)) - 1
@@ -64,6 +65,7 @@ if(input.par$average.type == "Mean") {
     group_by_at(vars(-.y)) %>%
     summarise(mn = mean(.y, na.rm = TRUE),
               n = n(),
+              custom_error = mean(!!sym(ctx$labels[[1]]), na.rm = TRUE),
               stdv = sd(.y, na.rm = TRUE))
 }
 if(input.par$average.type == "Median") {
@@ -71,8 +73,12 @@ if(input.par$average.type == "Median") {
     group_by_at(vars(-.y)) %>%
     summarise(mn = median(.y, na.rm = TRUE),
               n = n(),
+              custom_error = mean(!!sym(ctx$labels[[1]]), na.rm = TRUE),
               stdv = sd(.y, na.rm = TRUE))
 }
+
+# Compute SE
+df_agg <- df_agg %>% mutate(se = stdv / sqrt(n))
 
 fill.col <- NULL
 if(length(ctx$colors) > 0) {
@@ -126,6 +132,18 @@ if(input.par$jitter) {
 if(input.par$error.type == "Standard Deviation") {
   plt <- plt + geom_errorbar(
     aes(ymin = mn - stdv, ymax = mn + stdv),
+    width = input.par$bar.width,
+    position = position_dodge(width = input.par$dodge.width)
+  )
+} else if(input.par$error.type == "Custom") {
+  plt <- plt + geom_errorbar(
+    aes(ymin = mn - custom_error, ymax = mn + custom_error),
+    width = input.par$bar.width,
+    position = position_dodge(width = input.par$dodge.width)
+  )
+} else if(input.par$error.type == "95% Confidence Interval") {
+  plt <- plt + geom_errorbar(
+    aes(ymin = mn - 1.96*se, ymax = mn + 1.96*se),
     width = input.par$bar.width,
     position = position_dodge(width = input.par$dodge.width)
   )

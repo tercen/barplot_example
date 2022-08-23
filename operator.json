@@ -52,12 +52,14 @@
   {
     "kind": "EnumeratedProperty",
     "name": "error.type",
-    "defaultValue": "Standard Deviation",
+    "defaultValue": "None",
     "values": [
       "None",
-      "Standard Deviation"
+      "Standard Deviation",
+      "Custom",
+      "95% Confidence Interval"
     ],
-    "description": "Indicates which metric should be used for error bars."
+    "description": "Indicates which metric should be used for error bars. Is Custom is selected, error bars specified in the input projection will be used."
   },
   {
     "kind": "DoubleProperty",
