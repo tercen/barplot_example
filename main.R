@@ -45,6 +45,7 @@ input.par <- list(
   average.type = ctx$op.value("average.type", type = as.character, default = "Mean"),
   dot.size     = ctx$op.value("dot.size", type = as.double, default = 0.5),
   error.type   = ctx$op.value("error.type", type = as.character, default = "Standard Deviation"),
+  bar.position = ctx$op.value("bar.position", type = as.character, default = "dodge"),
   bar.width    = ctx$op.value("bar.width", type = as.double, default = 0.25),
   dodge.width  = ctx$op.value("dodge.width", type = as.double, default = 1.1),
   jitter.width = ctx$op.value("jitter.width", type = as.double, default = 0.05),
@@ -107,8 +108,15 @@ theme_set(th())
 clean_colname <- paste0("`", fill.col, "`")
 
 ### Core plot with x and y axes
+pos <- switch (
+  input.par$bar.position,
+  "dodge" = position_dodge(width = input.par$dodge.width),
+  "stack" = "stack",
+  "fill" = "fill"
+)
+
 plt <- ggplot(df_agg, aes_string(x = ".x", y = "mn", fill = clean_colname)) +
-  geom_bar(position = position_dodge(width = input.par$dodge.width), stat = "identity") +
+  geom_bar(position = pos, stat = "identity") +
   labs(
     title = input.par$title,
     subtitle = input.par$subtitle,
@@ -119,42 +127,47 @@ plt <- ggplot(df_agg, aes_string(x = ".x", y = "mn", fill = clean_colname)) +
   )
 
 ### Add jitter
-if(input.par$jitter) {
-  if(is.null(fill.col)) {
-    plt <- plt + geom_jitter(
-      data = df,
-      aes_string(x = ".x", y = ".y", fill = clean_colname),
-      size = input.par$dot.size
-    )
-  } else {
-    plt <- plt + geom_jitter(
-      data = df,
-      aes_string(x = ".x", y = ".y", fill = clean_colname),
-      size = input.par$dot.size,
-      position = position_jitterdodge(jitter.width = input.par$jitter.width, dodge.width = input.par$dodge.width)
-    )
+if(input.par$bar.position == "dodge") {
+
+  if(input.par$jitter) {
+    if(is.null(fill.col)) {
+      plt <- plt + geom_jitter(
+        data = df,
+        aes_string(x = ".x", y = ".y", fill = clean_colname),
+        size = input.par$dot.size
+      )
+    } else {
+      plt <- plt + geom_jitter(
+        data = df,
+        aes_string(x = ".x", y = ".y", fill = clean_colname),
+        size = input.par$dot.size,
+        position = position_jitterdodge(jitter.width = input.par$jitter.width, dodge.width = input.par$dodge.width)
+      )
+    }
   }
 }
 
 ### Add SD bars
-if(input.par$error.type == "Standard Deviation") {
-  plt <- plt + geom_errorbar(
-    aes(ymin = mn - stdv, ymax = mn + stdv),
-    width = input.par$bar.width,
-    position = position_dodge(width = input.par$dodge.width)
-  )
-} else if(input.par$error.type == "Custom") {
-  plt <- plt + geom_errorbar(
-    aes(ymin = mn - custom_error, ymax = mn + custom_error),
-    width = input.par$bar.width,
-    position = position_dodge(width = input.par$dodge.width)
-  )
-} else if(input.par$error.type == "95% Confidence Interval") {
-  plt <- plt + geom_errorbar(
-    aes(ymin = mn - 1.96 * se, ymax = mn + 1.96 * se),
-    width = input.par$bar.width,
-    position = position_dodge(width = input.par$dodge.width)
-  )
+if(input.par$bar.position == "dodge") {
+  if(input.par$error.type == "Standard Deviation") {
+    plt <- plt + geom_errorbar(
+      aes(ymin = mn - stdv, ymax = mn + stdv),
+      width = input.par$bar.width,
+      position = position_dodge(width = input.par$dodge.width)
+    )
+  } else if(input.par$error.type == "Custom") {
+    plt <- plt + geom_errorbar(
+      aes(ymin = mn - custom_error, ymax = mn + custom_error),
+      width = input.par$bar.width,
+      position = position_dodge(width = input.par$dodge.width)
+    )
+  } else if(input.par$error.type == "95% Confidence Interval") {
+    plt <- plt + geom_errorbar(
+      aes(ymin = mn - 1.96 * se, ymax = mn + 1.96 * se),
+      width = input.par$bar.width,
+      position = position_dodge(width = input.par$dodge.width)
+    )
+  }
 }
 
 ### Color palette

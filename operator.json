@@ -62,6 +62,17 @@
     "description": "Indicates which metric should be used for error bars. Is Custom is selected, error bars specified in the input projection will be used."
   },
   {
+    "kind": "EnumeratedProperty",
+    "name": "bar.position",
+    "defaultValue": "dodge",
+    "values": [
+      "dodge",
+      "stack",
+      "fill"
+    ],
+    "description": "Bar position - any of dodge, stack or fill."
+  },
+  {
     "kind": "DoubleProperty",
     "name": "bar.width",
     "defaultValue": 0.25,
